@@ -33,7 +33,14 @@ class RateDiscountPolicyTest {
         int discount = discountPolicy.discount(member, 10000);
         //then
         assertThat(discount).isEqualTo(0); //static import 찾아보자
+        // Ctrl + shift + t 테스트 생성 단축키
+        // Assertions.AssertThat 에서 Alt + Enter 를 통해 onDemand static import를 실행해서 위 같이 만들었다.
         // 정리 예정
+
+        // 그외의 단축키
+        // Ctrl + Shift + Alt + T ---- 리팩토링 단축키
+        // Ctrl + Shift + Enter ---- 빠른완성
+        // Alt + Insert ---- generate 단축키
     }
 
 }
