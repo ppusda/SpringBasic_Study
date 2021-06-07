@@ -23,7 +23,7 @@ public class BeanDefinitionTest {
             }
         }
     }
-}
+} // Java JVM
 
 // BeanDefinition 이라는 것으로 스프링 빈의 설정 메타정보를 추상화 시킨다.
 // 정보를 등록하는방법으로는 직접 등록, FatoryBean이라는 것으로 등록이 있다.
