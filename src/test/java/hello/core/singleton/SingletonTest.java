@@ -5,6 +5,8 @@ import hello.core.member.MemberService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -43,4 +45,22 @@ public class SingletonTest {
     }
     // 이렇게 싱글톤 패턴을 사용할 수 있다.
     // 하지만 스프링 컨테이너에서는 싱글톤을 직접 관리해주는 역할을 한다.
+
+    @Test
+    @DisplayName("스프링 컨테이너와 싱글톤")
+    void springContainer() {
+
+        ApplicationContext ac = new AnnotationConfigApplicationContext(AppConfig.class);
+
+        // 조회 : 호출할 때 마다 객체를 생성
+        MemberService memberService1 = ac.getBean("memberService", MemberService.class);
+        MemberService memberService2 = ac.getBean("memberService", MemberService.class);
+
+        // 참조 값이 같음 == 싱글톤이라는 얘기
+        System.out.println("memberService1 = " + memberService1);
+        System.out.println("memberService2 = " + memberService2);
+
+        assertThat(memberService1).isSameAs(memberService2);
+    } // 스프링 컨테이너가 관리해주는 객체는 싱글톤으로 효율적으로 사용할 수 있다. == 스프링은 싱글톤 방식으로 동작한다!
+    // 물론 스프링에서 요청할 때 마다 새로운 객체를 생성해서 반환하는 기능도 제공한다.
 }
