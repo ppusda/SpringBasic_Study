@@ -12,8 +12,23 @@ import org.springframework.stereotype.Component;
 @Component // ("orderservice") 로 이름 부여가능
 public class OrderServiceImpl implements OrderService{
 
+    // @Autowired
     private final MemberRepository memberRepository;
+    // @Autowired
     private final DiscountPolicy discountPolicy; // dip를 지키기 위해 인터페이스에만 의존
+    // 필드 주입, 필드 앞에 바로 @Autowired를 넣는다.
+    // 하지만 권장하지 않는 방법... 테스트코드 같은데서만 사용하고, 실제로는 사용하지 말자...
+
+
+//    @Autowired
+//    public void setMemberRepository(MemberRepository memberRepository) {
+//        this.memberRepository = memberRepository;
+//    }
+//
+//    @Autowired
+//    public void setDiscountPolicy(DiscountPolicy discountPolicy) {
+//        this.discountPolicy = discountPolicy;
+//    } // 수정자 주입, final을 없애야 함, 변경, 선택적 의존관계 주입
 
     // private final DiscountPolicy discountPolicy = new FixDiscountPolicy();
     // private DiscountPolicy discountPolicy = new RateDiscountPolicy();
@@ -21,11 +36,11 @@ public class OrderServiceImpl implements OrderService{
     // 스프링을 통해 구현 클래스를 위의 객체에 주입해줘야 해결이 될 듯하다.
     // appconfig로 ---->
 
-    @Autowired
+    @Autowired // 생성자가 한개이면 생략가능하다.
     public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;
-    }
+    } // 생성자 주입 방법, 필수 값이며 불변해야 하는 경우
 
     @Override
     public Order createOrder(Long memberId, String itemname, int itemPrice) {

@@ -2,15 +2,23 @@ package hello.core.singleton;
 
 public class SingletonService {
 
-    private static final SingletonService instance = new SingletonService();
-    // static으로 생성해서 클래스영역(Static 영역)에 하나만 만들어두고
-
-    public static SingletonService getInstance() {
-        return instance;
-    } // 해당 메소드를 통해서만 조회 할 수 있고,
+//    private static final SingletonService instance = new SingletonService();
+//    // static으로 생성해서 클래스영역(Static 영역)에 하나만 만들어두고
+//
+//    public static SingletonService getInstance() {
+//        return instance;
+//    } // 해당 메소드를 통해서만 조회 할 수 있고,
     // 이 메서드를 호출하면 항상 같은 인스턴스를 반환한다.
 
     private SingletonService() { } // private 외부 생성 막기
+
+    private static class InnerInstanceClass {
+        private static final SingletonService instance = new SingletonService();
+    }
+
+    public static SingletonService getInstance() {
+        return InnerInstanceClass.instance;
+    }
 
     public void logic() {
         System.out.println("싱글톤 객체 로직 호출");
