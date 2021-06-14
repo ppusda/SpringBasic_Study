@@ -6,10 +6,12 @@ import hello.core.discount.RateDiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
 import hello.core.member.MemoryMemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component // ("orderservice") 로 이름 부여가능
+@RequiredArgsConstructor // 아래 final로 생성된 필드를 자동으로 모아서 생성자로 만들어준다.
 public class OrderServiceImpl implements OrderService{
 
     // @Autowired
@@ -36,11 +38,12 @@ public class OrderServiceImpl implements OrderService{
     // 스프링을 통해 구현 클래스를 위의 객체에 주입해줘야 해결이 될 듯하다.
     // appconfig로 ---->
 
-    @Autowired // 생성자가 한개이면 생략가능하다.
-    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-        this.memberRepository = memberRepository;
-        this.discountPolicy = discountPolicy;
-    } // 생성자 주입 방법, 필수 값이며 불변해야 하는 경우
+//    // @Autowired // 생성자가 한개이면 생략가능하다.
+//    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+//        this.memberRepository = memberRepository;
+//        this.discountPolicy = discountPolicy;
+//    } // 생성자 주입 방법, 필수 값이며 불변해야 하는 경우
+//    // 최적화를 위해 롬복이라는 라이브러리를 사용해보자
 
     @Override
     public Order createOrder(Long memberId, String itemname, int itemPrice) {
@@ -55,3 +58,4 @@ public class OrderServiceImpl implements OrderService{
         return memberRepository;
     }
 }
+// 롬복, 생성자 한개, 스프링의 component 까지 엄청난 최적화 가능
