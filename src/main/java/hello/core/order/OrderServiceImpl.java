@@ -8,10 +8,11 @@ import hello.core.member.MemberRepository;
 import hello.core.member.MemoryMemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component // ("orderservice") 로 이름 부여가능
-@RequiredArgsConstructor // 아래 final로 생성된 필드를 자동으로 모아서 생성자로 만들어준다.
+// @RequiredArgsConstructor // 아래 final로 생성된 필드를 자동으로 모아서 생성자로 만들어준다.
 public class OrderServiceImpl implements OrderService{
 
     // @Autowired
@@ -38,12 +39,20 @@ public class OrderServiceImpl implements OrderService{
     // 스프링을 통해 구현 클래스를 위의 객체에 주입해줘야 해결이 될 듯하다.
     // appconfig로 ---->
 
-//    // @Autowired // 생성자가 한개이면 생략가능하다.
-//    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-//        this.memberRepository = memberRepository;
-//        this.discountPolicy = discountPolicy;
-//    } // 생성자 주입 방법, 필수 값이며 불변해야 하는 경우
-//    // 최적화를 위해 롬복이라는 라이브러리를 사용해보자
+    // 같은 타입의 스프링 빈이 2개가 되면 자동의존 관계주입에서 문제가 생긴다.
+    // 1. rateDiscountPolicy 로 이름 변경(필드 명으로 빈이름 매칭)
+    // 2. (MemberRepository memberRepository, @Qualifier("mainDiscountPolicy") DiscountPolicy discountPolicy)
+    // ==> Qualifier 를 사용해서 서로 매칭 시켜준다.
+    // (만약 없으면 빈에 등록된 mainDiscountPolicy를 찾는다. 정확한 용도로만 사용하는게 좋다.)
+    // 3. Primary를 사용해 이걸 먼저 사용할 것이라는 것을 명시시켜준다. RateDiscountPolicy로 -->
+    // 우선순위 = Qualifier > Primary, 메인 DB 커넥션은 Primary, 서브 DB 커넥션 빈을 흭득할 때는 Qualifier 이용하는게 좋을 듯 싶다.
+
+    @Autowired // 생성자가 한개이면 생략가능하다.
+    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    } // 생성자 주입 방법, 필수 값이며 불변해야 하는 경우
+    // 최적화를 위해 롬복이라는 라이브러리를 사용해보자
 
     @Override
     public Order createOrder(Long memberId, String itemname, int itemPrice) {
