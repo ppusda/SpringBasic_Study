@@ -42,6 +42,7 @@ public class OrderServiceImpl implements OrderService{
     // 같은 타입의 스프링 빈이 2개가 되면 자동의존 관계주입에서 문제가 생긴다.
     // 1. rateDiscountPolicy 로 이름 변경(필드 명으로 빈이름 매칭)
     // 2. (MemberRepository memberRepository, @Qualifier("mainDiscountPolicy") DiscountPolicy discountPolicy)
+    //                                        @MainDiscountPolicy - 직접 생성한 어노테이션, 너무 무분별하게만 쓰지말자.
     // ==> Qualifier 를 사용해서 서로 매칭 시켜준다.
     // (만약 없으면 빈에 등록된 mainDiscountPolicy를 찾는다. 정확한 용도로만 사용하는게 좋다.)
     // 3. Primary를 사용해 이걸 먼저 사용할 것이라는 것을 명시시켜준다. RateDiscountPolicy로 -->
